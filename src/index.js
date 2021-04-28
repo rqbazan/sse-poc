@@ -1,4 +1,5 @@
 import 'zeit-toast-clone/styles.css'
+import 'react-circular-progressbar/dist/styles.css'
 import 'tailwindcss/tailwind.css'
 import './index.css'
 
@@ -8,9 +9,9 @@ import { NotifierPortal } from 'zeit-toast-clone'
 import App from './app'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <NotifierPortal />
     <App />
-  </React.StrictMode>,
+  </>,
   document.getElementById('root')
 )
