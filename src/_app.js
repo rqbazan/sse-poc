@@ -13,12 +13,16 @@ function connect({ URL, headers, eventName }, eventHandler) {
 function Stream({ config, onClose }) {
   const [isConnected, setIsConnected] = React.useState(false)
 
-  const [stream, setStream] = React.useState('')
+  const [events, setEvents] = React.useState([])
 
   const connRef = React.useRef()
 
   return (
-    <div className="text-gray-800 bg-blue-300 p-4 relative">
+    <div
+      className={`text-gray-800 ${
+        isConnected ? 'bg-green-300' : 'bg-gray-300'
+      } p-4 relative`}
+    >
       <div className="absolute right-4">
         <button onClick={onClose}>
           <svg
@@ -28,19 +32,18 @@ function Stream({ config, onClose }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
-      <p>
+      <p className="space-x-3">
         <span className="font-semibold">URL:</span> {config.URL}
-      </p>
-      <p>
+        <span className="font-semibold">/</span>
         <span className="font-semibold">Event Name:</span> {config.eventName}
       </p>
       <div>
@@ -49,7 +52,17 @@ function Stream({ config, onClose }) {
           {JSON.stringify(config.headers, null, 2)}
         </pre>
       </div>
-      <p className="bg-white p-4 mt-3">{stream}</p>
+      <div className="bg-white p-4 mt-3 h-56 max-h-56 overflow-auto border-2 border-gray-700 space-y-2">
+        {events.length > 0 ? (
+          events.map((e) => (
+            <pre key={e.lastEventId}>{JSON.stringify(e.data)}</pre>
+          ))
+        ) : (
+          <p className="text-gray-400 font-mono">
+            Aqui se listaran los eventos...
+          </p>
+        )}
+      </div>
       <div className="flex justify-end mt-3">
         <button
           className="bg-purple-300 rounded-sm p-2 uppercase text-sm font-semibold"
@@ -57,17 +70,9 @@ function Stream({ config, onClose }) {
             if (isConnected) {
               connRef.current.close()
             } else {
-              connRef.current = connect(config, (e) => {
-                try {
-                  setStream((v) =>
-                    v === ''
-                      ? JSON.stringify(e.data)
-                      : `${v}\n${JSON.stringify(e.data)}`
-                  )
-                } catch (error) {
-                  console.error(error)
-                }
-              })
+              connRef.current = connect(config, (e) =>
+                setEvents((v) => [...v, e])
+              )
             }
             setIsConnected((v) => !v)
           }}
@@ -82,7 +87,11 @@ function Stream({ config, onClose }) {
 export default function App() {
   const configCount = React.useRef(0)
 
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      headers: '{}',
+    },
+  })
 
   const [streamConfigs, setStreamConfigs] = React.useState([])
 
@@ -111,6 +120,7 @@ export default function App() {
           <input
             className="h-8 border border-blue-400 px-2"
             required
+            placeholder="Ej. http://mysite.com/sse-events"
             {...register('URL')}
           />
         </div>
@@ -119,13 +129,14 @@ export default function App() {
           <input
             className="h-8 border border-blue-400 px-2"
             required
+            placeholder="Ej. myevent"
             {...register('eventName')}
           />
         </div>
         <div className="flex flex-col">
           <label className="text-gray-200">Headers</label>
           <textarea
-            className="border border-blue-400 p-2"
+            className="border border-blue-400 p-2 font-mono"
             rows={3}
             required
             {...register('headers')}

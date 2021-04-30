@@ -27,7 +27,12 @@ http
 
     // Send event every 3 seconds or so forever...
     const interval = setInterval(() => {
-      response.write(`event: myEvent\nid: ${id}\ndata:This is event ${id}.`)
+      response.write(
+        `event: myEvent\nid: ${id}\ndata:${JSON.stringify({
+          a: 1,
+          b: {},
+        })}`
+      )
       response.write('\n\n')
       id++
     }, 3000)
