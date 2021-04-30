@@ -11641,8 +11641,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zeit-toast-clone@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/zeit-toast-clone/-/zeit-toast-clone-0.0.1.tgz#b075e52a2a0748e336ba21b36d4ed9e9d56214e1"
-  integrity sha512-ZPeCDX02SKT4i2V2k4kXwTe1OFr4m9psgqZeXHe8qEz541ImJ3khWckeBRpF9x76BZCZlZCuKlVHOvXmXsQudA==

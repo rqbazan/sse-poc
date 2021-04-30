@@ -1,6 +1,4 @@
 import * as React from 'react'
-import notifier from 'zeit-toast-clone'
-import { CircularProgressbar } from 'react-circular-progressbar'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useForm } from 'react-hook-form'
 
@@ -67,7 +65,7 @@ function Stream({ config, onClose }) {
                       : `${v}\n${JSON.stringify(e.data)}`
                   )
                 } catch (error) {
-                  notifier.error(error.message)
+                  console.error(error)
                 }
               })
             }
@@ -97,8 +95,8 @@ export default function App() {
       }
 
       setStreamConfigs((prevStreamConfigs) => [...prevStreamConfigs, newConfig])
-    } catch (err) {
-      notifier.error(err.message)
+    } catch (error) {
+      console.error(error)
     }
   }
 
