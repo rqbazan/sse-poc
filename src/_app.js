@@ -24,7 +24,12 @@ function Stream({ config, onClose }) {
       } p-4 relative`}
     >
       <div className="absolute right-4">
-        <button onClick={onClose}>
+        <button
+          onClick={() => {
+            connRef.current?.close()
+            onClose()
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
